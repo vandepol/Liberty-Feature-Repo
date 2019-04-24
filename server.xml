@@ -1,0 +1,64 @@
+<server description="Lars server">
+
+    <!-- Enable features -->
+    <featureManager>
+        <feature>servlet-3.0</feature>
+        <feature>jaxrs-1.1</feature>
+        <feature>mongodb-2.0</feature>
+        <feature>cdi-1.0</feature>
+        <feature>jndi-1.0</feature>
+        <feature>appSecurity-2.0</feature>
+        <feature>ssl-1.0</feature>
+    </featureManager>
+    <keyStore id="defaultKeyStore" password="{xor}PDc+MTg6Nis="/>
+
+    <!-- You need to specify a user registry so that you can map users to roles in the application
+         As a starting point you could use a simple basic registry like the one below.
+         Use the securityUtility program included in your liberty install to encode the passwords.
+         
+         Alternatively, you could replace this with an LdapRegistry or another sort of user registry 
+         supported by Liberty
+    -->
+    <basicRegistry id="defaultRegistry" realm="default">
+        <user name="admin" password="admin"/>
+        <group name="Administrators">
+            <member name="admin"/>
+        </group>
+    </basicRegistry>
+    
+    <webAppSecurity singleSignonEnabled="false"/>
+
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+
+    <!-- This library must be used by the WAR app in order for both the app and the MongoDB feature to see the
+         same MongoDB driver classes.
+      -->
+    <library id="mongo-lib" apiTypeVisibility="spec,ibm-api,api,third-party">
+        <file name="${shared.resource.dir}/libs/mongo-java-driver-2.13.0.jar"/>
+    </library>
+
+    <!-- Use slightly safer write concern than the default -->
+    <mongo id="mongo" libraryRef="mongo-lib" writeConcern="JOURNAL_SAFE">
+        <hostNames>mongo</hostNames>
+    </mongo>
+    
+    <!-- Uncomment this to override the base URL (may be useful if lars is behind a reverse proxy -->
+    <!-- <jndiEntry id="lars/URLBase" jndiName="lars/URLBase" value="http://my.external.domain/repo/" /> -->
+
+    <mongoDB databaseName="larsDB" jndiName="mongo/larsDB" mongoRef="mongo"/>
+
+    <webApplication id="com.ibm.ws.lars.rest" location="larsServer.war" name="com.ibm.ws.lars.rest" contextRoot="/">
+        <classloader commonLibraryRef="mongo-lib" apiTypeVisibility="spec,ibm-api,api,third-party"/>
+        
+        <application-bnd>
+            <security-role name="User">
+                <special-subject type="EVERYONE"/>
+            </security-role>
+            <security-role name="Administrator">
+                <group name="Administrators"/>
+            </security-role>
+        </application-bnd>
+
+    </webApplication>
+</server>
