@@ -1,0 +1,33 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "liberty-feature-repo-19004",
+    "namespace": "default"
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "liberty-feature-repo-19004"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "liberty-feature-repo-19004"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "liberty-feature-repo-19004",
+            "image": "vandepol/liberty-feature-repo:19.0.0.4",
+            "imagePullPolicy": "Always"
+          }
+        ],
+        "restartPolicy": "Always"
+      }
+    }
+  }
+}
