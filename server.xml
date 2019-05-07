@@ -40,7 +40,7 @@
 
     <!-- Use slightly safer write concern than the default -->
     <mongo id="mongo" libraryRef="mongo-lib" writeConcern="JOURNAL_SAFE">
-        <hostNames>mongo</hostNames>
+        <hostNames>localhost</hostNames>
     </mongo>
     
     <!-- Uncomment this to override the base URL (may be useful if lars is behind a reverse proxy -->

@@ -10,14 +10,18 @@ COPY server.xml /opt/ibm/wlp/usr/servers/larsServer/server.xml
 
 USER root
 RUN apt-get update && apt-get install -y mongodb
+
 RUN mkdir -p /data/db
+RUN chmod 755 /data/db
+RUN chown 1001 /data/db
+RUN chmod  777 /
+USER 1001:0
 
+COPY --chown=1001:0 larsClient /tmp/larsClient
+COPY --chown=1001:0 featureRepo18.0.0.4 /featureRepo
 
-COPY larsClient /tmp/larsClient
-COPY featureRepo /featureRepo
-
-
-RUN mongod  & sleep 10s && /opt/ibm/wlp/bin/server start larsServer  && /tmp/larsClient/bin/larsClient upload /featureRepo/features/19.0.0.1/*.esa --url=http://localhost:9080/ma/v1 --username=admin --password=admin 
+USER root
+RUN mongod & sleep 10s && /opt/ibm/wlp/bin/server start larsServer && /tmp/larsClient/bin/larsClient upload /featureRepo/features/18.0.0.4/*.esa --url=http://localhost:9080/ma/v1 --username=admin --password=admin 
 #RUN /opt/ibm/wlp/bin/server stop larsServer
 
 RUN rm -rf /featureRepo
