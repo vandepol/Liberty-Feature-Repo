@@ -28,5 +28,5 @@ To run on Kubernetes you will need to push your docker image to your docker regi
 `kubectl get services | grep liberty-feature-repo`
 
 
-To configure liberty to point to your own repo, add the `repositories.config` to your `wlp/etc` directory (You may need to create etc folder).  See example here <link to etc>
+To configure liberty to point to your own repo, add the `repositories.config` to your `wlp/etc` directory (You may need to create etc folder).  See example here https://github.com/vandepol/Liberty-Feature-Repo/blob/master/etc/repositories.properties
 
