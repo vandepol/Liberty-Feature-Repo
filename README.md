@@ -16,7 +16,7 @@ If you want to build the docker container yourself just run
 `docker build . -f Dockerfile -t liberty-lars-feature-repo`
 
 To run the LARS server run the following command.
-`docker run --rm --name liberty-lars-feature-repo -v /Users/davidvandepol/larsdata:/data -p9080:9080 vandepol/liberty-lars-feature-repo`
+`docker run --rm --name liberty-lars-feature-repo -v /Users/davidvandepol/larsdata:/data/db -p9080:9080 vandepol/liberty-lars-feature-repo`
 
 This will start the LARS server.  Note this initially will not have any features populated into it.
 
